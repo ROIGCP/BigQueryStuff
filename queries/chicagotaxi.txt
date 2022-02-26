@@ -1,10 +1,10 @@
 SELECT  avg(fare) as avgfare
-FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips` 
+FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`;
 
 SELECT extract(year from trip_start_timestamp) as puyear, count(fare) as totalfares, avg(fare) as avgfare,avg(tips) as avgtip 
 FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips` as td
 group by puyear
-order by puyear
+order by puyear;
 
 
 # NOTE: These queries will incur charges > 0.25 each on Pay-As-You-Go (PAYG) - $5 per TB of Queries
@@ -26,20 +26,17 @@ CREATE schema taxidemo options(location="US");
 CREATE table taxidemo.taxipartitioned
   PARTITION BY DATE(trip_start_timestamp)
   as
-  SELECT *
-  FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`;
+  SELECT * FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`;
 
 CREATE table taxidemo.taxiclustered 
   CLUSTER BY unique_key
   as
-  SELECT *
-  FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`;
+  SELECT * FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`;
 
 CREATE table taxidemo.taxipartandcluster
   PARTITION BY DATE(trip_start_timestamp)
   CLUSTER BY company,taxi_id
   as
-  SELECT *
-  FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`;
+  SELECT * FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`;
 
 
