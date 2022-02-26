@@ -13,10 +13,10 @@ group by title
 order by totalviews desc;
 
 # Query to see Wikipedia Titles/Total Page Views on 1st January 2022 matching regular expression
-# Regular Expression example: (?i)r.*o.*i = Case Insensitive, r + any number of characters + o + any number of characters + i
+# Regular Expression example: (?i)r.*o.*i = Case Insensitive, g + any number of characters + oo + any number of characters + e
 # Change = to >= to query entire year to date (more expensive)
-SELECT title,sum(views) as totalviews FROM `bigquery-public-data.wikipedia.pageviews_2021` 
+SELECT title,sum(views) as totalviews FROM `bigquery-public-data.wikipedia.pageviews_2022` 
 WHERE DATE(datehour) > "2022-01-01" and 
-regexp_contains(title,"(?i)r.*o.*i")
+regexp_contains(title,"(?i)g.*oo.*e")
 group by title
 order by totalviews desc;
