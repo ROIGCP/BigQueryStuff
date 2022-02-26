@@ -1,1 +1,22 @@
-# 
+# See https://cloud.google.com/bigquery/docs/information-schema-intro for more details
+
+CREATE SCHEMA datasetdemo options(location="US");
+
+CREATE TABLE datasetdemo.names 
+  as SELECT * FROM roigcp.demo.names
+
+CREATE TABLE datasetdemo.namespartition
+  date(tscolumn)
+  as SELECT * FROM roigcp.demo.names
+
+create table datasetdemo.namescluster 
+  CLUSTER BY lastname,firstname
+  as SELECT * from roigcp.demo.names
+
+CREATE TABLE datasetdemo.namespartitionandcluster
+  PARTITION BY date(tscolumn)
+  as SELECT * FROM roigcp.demo.names
+
+create table datasetdemo.externalnames;
+  as ....
+  
