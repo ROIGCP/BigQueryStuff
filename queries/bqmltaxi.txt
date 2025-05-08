@@ -1,37 +1,37 @@
 # Create a Dataset "bqmldemo"
 CREATE schema bqmldemo options(location="US");
 
-# Create a copy of 2019 Taxi Data
-CREATE table bqmldemo.taxi2019 as
+# Create a copy of 2022 Taxi Data
+CREATE table bqmldemo.taxi2022 as
 SELECT fare, extract(dayofweek from trip_start_timestamp) as dow,
 extract(hour from trip_start_timestamp) as hod,
 pickup_latitude, pickup_longitude, dropoff_latitude, dropoff_longitude
 FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
-where fare > 5 and fare < 50
+where fare > 10 and fare < 75
 and pickup_latitude is not null and dropoff_latitude is not null
-and trip_start_timestamp between '2019-01-01' and '2019-12-31';
+and trip_start_timestamp between '2022-01-01' and '2022-12-31';
 
-# Create a copy of January and February 2020 Taxi Data
-create table bqmldemo.taxi2020 as
+# Create a copy of January and February 2023 Taxi Data
+create table bqmldemo.taxi2023 as
 SELECT fare, extract(dayofweek from trip_start_timestamp) as dow,
 extract(hour from trip_start_timestamp) as hod,
 pickup_latitude, pickup_longitude, dropoff_latitude, dropoff_longitude
 FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
-where fare > 5 and fare < 50
+where fare > 10 and fare < 75
 and pickup_latitude is not null and dropoff_latitude is not null
-and trip_start_timestamp between '2020-01-01' and '2020-02-29';
+and trip_start_timestamp between '2023-01-01' and '2023-02-28';
 
-# Create a Linear Regression Model using 2019 data to predict fare
+# Create a Linear Regression Model using 2022 data to predict fare
 CREATE model bqmldemo.taximodel1
 options (model_type="Linear_reg")
 as select fare as label, dow, hod, pickup_latitude, pickup_longitude, dropoff_latitude, dropoff_longitude
-from bqmldemo.taxi2019;
+from bqmldemo.taxi2022;
 
-# Use the model against January/February 2020 Data and store into taximodel1test
+# Use the model against January/February 2023 Data and store into taximodel1test
 CREATE table bqmldemo.taximodel1test as 
 select * from ml.predict(model bqmldemo.taximodel1,
 (select fare as label, dow, hod, pickup_latitude, pickup_longitude, dropoff_latitude, dropoff_longitude 
-from bqmldemo.taxi2020));
+from bqmldemo.taxi2023));
 
 # See how well our model worked for Day (1=Sunday, 7=Saturday) and Hour of Day
 SELECT dow,hod,avg(predicted_label),avg(label) FROM bqmldemo.taximodel1test 

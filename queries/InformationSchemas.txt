@@ -1,6 +1,6 @@
 # See https://cloud.google.com/bigquery/docs/information-schema-intro for more details
 
-CREATE SCHEMA datasetdemo options(location="US");
+CREATE SCHEMA datasetdemo options(location="US"); 
 
 CREATE TABLE datasetdemo.names 
   as SELECT * FROM roigcp.demo.names

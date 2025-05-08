@@ -6,7 +6,6 @@ FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips` as td
 group by puyear
 order by puyear;
 
-
 # NOTE: These queries will incur charges > 0.25 each on Pay-As-You-Go (PAYG) - $5 per TB of Queries
 
 SELECT * 
@@ -26,17 +25,27 @@ CREATE schema taxidemo options(location="US");
 CREATE table taxidemo.taxipartitioned
   PARTITION BY DATE(trip_start_timestamp)
   as
-  SELECT * FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`;
+  SELECT * FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+  where trip_start_timestamp > '2015-01-01';
+# NOTE - there is a limit to 4000 partitions - so use data from 2015-01-01 onward
 
 CREATE table taxidemo.taxiclustered 
   CLUSTER BY unique_key
   as
-  SELECT * FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`;
+  SELECT * FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+  where trip_start_timestamp > '2015-01-01';
+
 
 CREATE table taxidemo.taxipartandcluster
   PARTITION BY DATE(trip_start_timestamp)
+  CLUSTER BY taxi_id
+  as
+  SELECT * FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips` 
+  where trip_start_timestamp > '2015-01-01';
+
+CREATE table taxidemo.taxipartandcluster2
+  PARTITION BY DATE(trip_start_timestamp)
   CLUSTER BY company,taxi_id
   as
-  SELECT * FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`;
-
-
+  SELECT * FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+  where trip_start_timestamp > '2015-01-01';

@@ -1,22 +1,22 @@
-# Query to see Wiki/Total Page Views by Wiki on 1st January 2022
-SELECT wiki,sum(views) as totalviews FROM `bigquery-public-data.wikipedia.pageviews_2022` 
-WHERE DATE(datehour) = "2022-01-01"
+# Query to see Wiki/Total Page Views by Wiki on 1st January 2025
+SELECT wiki,sum(views) as totalviews FROM `bigquery-public-data.wikipedia.pageviews_2025` 
+WHERE DATE(datehour) = "2025-01-01"
 group by wiki
 order by totalviews desc;
 
-# Query to see Wikipedia Titles/Total Page Views on 1st January 2022
+# Query to see Wikipedia Titles/Total Page Views on 1st January 2025
 # Change = to >= to query entire year to date (more expensive)
 SELECT title,sum(views) as totalviews
-FROM `bigquery-public-data.wikipedia.pageviews_2022` 
-WHERE DATE(datehour) = "2022-01-01" 
+FROM `bigquery-public-data.wikipedia.pageviews_2025` 
+WHERE DATE(datehour) = "2025-01-01" 
 group by title
 order by totalviews desc;
 
-# Query to see Wikipedia Titles/Total Page Views on 1st January 2022 matching regular expression
+# Query to see Wikipedia Titles/Total Page Views on 1st January 2025 matching regular expression
 # Regular Expression example: (?i)r.*o.*i = Case Insensitive, g + any number of characters + oo + any number of characters + e
 # Change = to >= to query entire year to date (more expensive)
-SELECT title,sum(views) as totalviews FROM `bigquery-public-data.wikipedia.pageviews_2022` 
-WHERE DATE(datehour) > "2022-01-01" and 
+SELECT title,sum(views) as totalviews FROM `bigquery-public-data.wikipedia.pageviews_2025` 
+WHERE DATE(datehour) > "2025-01-01" and 
 regexp_contains(title,"(?i)g.*oo.*e")
 group by title
 order by totalviews desc;
